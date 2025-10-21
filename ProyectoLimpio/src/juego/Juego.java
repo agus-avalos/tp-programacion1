@@ -13,6 +13,8 @@ public class Juego extends InterfaceJuego
 	Cuadricula cua;
 	Regalo[] regalos;
 	Planta[]plantas;
+	private int tiempoplanta=0;
+	private int tiempoplantafinal=180;
 	// Variables y métodos propios de cada grupo
 	// ...
 
@@ -174,7 +176,11 @@ public class Juego extends InterfaceJuego
 		}
 
 		if(!plantasNoPlantadas(this.plantas)) {
+			tiempoplanta++;
+			if(tiempoplanta >= tiempoplantafinal) {
 			crearPlanta(this.plantas);
+			tiempoplanta=0;
+			}
 		}
 	}
 
@@ -196,6 +202,7 @@ public class Juego extends InterfaceJuego
 			}
 		}
 	}
+	
 
 
 	@SuppressWarnings("unused")
