@@ -2,8 +2,10 @@ package juego;
 
 
 import java.awt.Color;
+import java.awt.Image;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 import entorno.InterfaceJuego;
 
 public class Juego extends InterfaceJuego
@@ -15,6 +17,7 @@ public class Juego extends InterfaceJuego
 	Planta[]plantas;
 	private int tiempoplanta=0;
 	private int tiempoplantafinal=180;
+	Image fondoplantas;
 	// Variables y métodos propios de cada grupo
 	// ...
 
@@ -22,6 +25,10 @@ public class Juego extends InterfaceJuego
 	{
 		// Inicializa el objeto entorno
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+		
+		this.fondoplantas = Herramientas.cargarImagen("fondo.png");
+
+		
 		cua=new Cuadricula(50,150,entorno);
 		regalos=new Regalo[5];
 		for(int i=0; i < 5; i++) {
@@ -46,6 +53,8 @@ public class Juego extends InterfaceJuego
 	{
 		// Procesamiento de un instante de tiempo
 		// ...
+		entorno.dibujarImagen(fondoplantas, 400, 35,0);
+		 
 		cua.dibujar();
 		for(Regalo r:this.regalos) {
 			r.dibujar();
