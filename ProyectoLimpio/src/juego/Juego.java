@@ -57,56 +57,64 @@ public class Juego extends InterfaceJuego
 		}
 
 		if(entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
-			for(int ite=0; ite < plantas.length; ite ++) {
-				if(plantas[ite] != null) {
-					if(plantas[ite].encima(entorno.mouseX(),entorno.mouseY())){
-						plantas[ite].seleccionada=true;
-					}
-					else {
-						plantas[ite].seleccionada=false;
-					}
-				}
+			if (entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
+			    boolean seleccionoAlguien = false;
+			    for (int i = 0; i < plantas.length; i++) {
+			        if (plantas[i] != null && plantas[i].encima(entorno.mouseX(), entorno.mouseY())) {
+			            for (int j = 0; j < plantas.length; j++) {
+			                if (plantas[j] != null)
+			                    plantas[j].seleccionada = false;
+			            }
+			            plantas[i].seleccionada = true;
+			            if (plantas[i].plantada) {
+			                int ix = cua.cercano(plantas[i].x, plantas[i].y).x;
+			                int iy = cua.cercano(plantas[i].x, plantas[i].y).y;
+			                cua.ocupado[ix][iy] = false;
+			                plantas[i].plantada = false;
+			            }
+			            seleccionoAlguien = true;
+			            break;
+			        }
+			    }
+			    if (!seleccionoAlguien) {
+			        for (int i = 0; i < plantas.length; i++) {
+			            if (plantas[i] != null) {
+			                plantas[i].seleccionada = false;
+			            }
+			        }
+			    }
 			}
 		}
 
-
-		if(entorno.estaPresionado(entorno.BOTON_IZQUIERDO)) {
-			for(int ite=0; ite < plantas.length;ite++) {
-
-				if(plantas[ite] != null && plantas[ite].seleccionada) {
-					int indiceX = cua.cercano(entorno.mouseX(), entorno.mouseY()).x;
-					int indiceY = cua.cercano(entorno.mouseX(), entorno.mouseY()).y;
-					plantas[ite].arrastrar(entorno.mouseX(), entorno.mouseY());
-					cua.ocupado[indiceX][indiceY] = false;
-				}
-			}
+		if (entorno.estaPresionado(entorno.BOTON_IZQUIERDO)) {
+		    for (int i = 0; i < plantas.length; i++) {
+		        if (plantas[i] != null && plantas[i].seleccionada) {
+		            plantas[i].arrastrar(entorno.mouseX(), entorno.mouseY());
+		        }
+		    }
 		}
 
-
-		if(entorno.seLevantoBoton(entorno.BOTON_IZQUIERDO)) {
-			for(int ite=0; ite < this.plantas.length;ite++) {
-				if (plantas[ite] != null) {
-					if(plantas[ite].seleccionada) {
-						if(entorno.mouseY() < 70 && !plantas[ite].plantada ) {
-							plantas[ite].arrastrar(50, 50);
-
-						}else {
-							int indiceX = cua.cercanoL(entorno.mouseX(), entorno.mouseY()).x;
-							int indiceY = cua.cercanoL(entorno.mouseX(), entorno.mouseY()).y;
-							if(cua.ocupado[indiceX][indiceY]) {
-								return;
-							}
-							plantas[ite].arrastrar(cua.corX[indiceX],cua.corY[indiceY]);
-							cua.ocupado[indiceX][indiceY] = true;
-							plantas[ite].plantada = true;
-						}
-					}
-
-				}
-			}
+		if (entorno.seLevantoBoton(entorno.BOTON_IZQUIERDO)) {
+		    for (int i = 0; i < plantas.length; i++) {
+		        if (plantas[i] != null && plantas[i].seleccionada) {
+		            if (entorno.mouseY() < 70) {
+		                plantas[i].arrastrar(50, 50);
+		                plantas[i].plantada = false;
+		            } else {
+		                int ix = cua.cercano(entorno.mouseX(), entorno.mouseY()).x;
+		                int iy = cua.cercano(entorno.mouseX(), entorno.mouseY()).y;
+		                if (!cua.ocupado[ix][iy]) {
+		                    plantas[i].arrastrar(cua.corX[ix], cua.corY[iy]);
+		                    cua.ocupado[ix][iy] = true;
+		                    plantas[i].plantada = true;
+		                } else {
+		                    plantas[i].arrastrar(50, 50);
+		                    plantas[i].plantada = false;
+		                }
+		            }
+		        }
+		    }
 		}
-
-
 		for(int ite=0; ite < plantas.length;ite++) {
 			if(plantas[ite] != null) {
 				if(entorno.sePresiono(entorno.TECLA_ARRIBA)){
