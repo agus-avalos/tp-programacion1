@@ -15,6 +15,9 @@ public class Juego extends InterfaceJuego
 	Cuadricula cua;
 	Regalo[] regalos;
 	Planta[]plantas;
+	Zombie[]zombies;
+	int contadorSpawn; // cuenta los ticks
+	int indiceZombie;  // posición libre en el array
 	private int tiempoplanta=0;
 	private int tiempoplantafinal=180;
 	Image fondoplantas;
@@ -38,7 +41,10 @@ public class Juego extends InterfaceJuego
 		plantas[0]=new Planta(50,50,entorno);		
 		// Inicializar lo que haga falta para el juego
 		// ...
-
+		this.zombies = new Zombie[15];
+		this.zombies[0] = new Zombie(entorno);
+		this.indiceZombie = 1; // el siguiente zombi se guarda en la posición 1
+        this.contadorSpawn = 0;
 		// Inicia el juego!
 		this.entorno.iniciar();
 	}
@@ -60,7 +66,19 @@ public class Juego extends InterfaceJuego
 			r.dibujar();
 
 		}
-
+		contadorSpawn++;
+		 // --- Cada 150 ticks, crear un nuevo zombi si hay lugar ---
+        if (contadorSpawn >= 150 && indiceZombie < zombies.length) {
+            zombies[indiceZombie] = new Zombie(entorno);
+            indiceZombie++;
+            contadorSpawn = 0; // reinicia el tiempo de espera
+        }
+            for (int it = 0; it < indiceZombie; it++) {
+                if (zombies[it] != null) {
+                	zombies[it].x -= 0.5;// Movimiento hacia la izquierda
+                	zombies[it].dibujar();
+                }
+                }
 		for(int ite=0;ite < plantas.length;ite ++ ) {
 			if(plantas[ite] != null) {
 				plantas[ite].dibujar();
@@ -191,6 +209,8 @@ public class Juego extends InterfaceJuego
 			tiempoplanta=0;
 			}
 		}
+		
+           
 	}
 
 	public boolean plantasNoPlantadas(Planta[] pl) {
