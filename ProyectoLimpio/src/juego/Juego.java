@@ -21,6 +21,7 @@ public class Juego extends InterfaceJuego
 	private int tiempoplanta=0;
 	private int tiempoplantafinal=180;
 	Image fondoplantas;
+	Proyectil[] proyectiles; //arreglo de projectiles
 	// Variables y métodos propios de cada grupo
 	// ...
 
@@ -41,6 +42,7 @@ public class Juego extends InterfaceJuego
 		plantas[0]=new Planta(50,50,entorno);		
 		// Inicializar lo que haga falta para el juego
 		// ...
+		this.proyectiles = new Proyectil[50]; //inicializa y pongo como maximo 50
 		this.zombies = new Zombie[15];
 		this.zombies[0] = new Zombie(entorno);
 		this.indiceZombie = 1; // el siguiente zombi se guarda en la posición 1
@@ -83,6 +85,29 @@ public class Juego extends InterfaceJuego
 			if(plantas[ite] != null) {
 				plantas[ite].dibujar();
 			}
+			
+		}
+		for (int i = 0; i < plantas.length; i++) { // recorre todas las plantas en el arreglo plantas
+		    if (plantas[i] != null) { //comprueba que haya una planta
+		        Proyectil p = plantas[i].atacar(); //llama al metodo atacar para devoler un pryectil
+		        if (p != null) { //confiram si se genero el proyectil
+		            for (int j = 0; j < proyectiles.length; j++) {
+		                if (proyectiles[j] == null) {
+		                    proyectiles[j] = p;
+		                    break;
+		                }
+		            }
+		        }
+		    }
+		}
+		for (int i = 0; i < proyectiles.length; i++) {
+		    if (proyectiles[i] != null) {
+		        proyectiles[i].mover();   // mover el proyectil
+		        proyectiles[i].dibujar(); // dibujarlo
+		        if (!proyectiles[i].activo) {
+		            proyectiles[i] = null; // eliminarlo si salió de pantalla
+		        }
+		    }
 		}
 
 		if(entorno.sePresionoBoton(entorno.BOTON_IZQUIERDO)) {
@@ -240,3 +265,4 @@ public class Juego extends InterfaceJuego
 		Juego juego = new Juego();
 	}
 }
+

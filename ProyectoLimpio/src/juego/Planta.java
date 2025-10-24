@@ -11,6 +11,9 @@ public class Planta {
 	Entorno e;
 	boolean seleccionada;
 	boolean plantada;
+	int contadorDisparo;
+	int tiempoDisparo=100; //ticks
+	
 	public Planta(double x, double y, Entorno e) {
 		this.x = x;
 		this.y = y;
@@ -41,5 +44,18 @@ public class Planta {
 		this.x = xM;
 		this.y = yM;
 	}
+	
+	public Proyectil atacar () {
+		if (plantada) {
+			contadorDisparo++;
+			if (contadorDisparo >= tiempoDisparo) {  
+				contadorDisparo=0;
+				return new Proyectil(x+40,y,e); //general proyectil frente a la planta
+				
+			}
+		}
+		return null;
+	}
+	
 	
 }
